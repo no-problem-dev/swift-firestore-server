@@ -12,6 +12,6 @@ extension ByteBuffer {
         guard readableBytes > 0 else {
             return Data()
         }
-        return getData(at: readerIndex, length: readableBytes) ?? Data()
+        return self.getData(at: self.readerIndex, length: self.readableBytes) ?? Data()
     }
 }
