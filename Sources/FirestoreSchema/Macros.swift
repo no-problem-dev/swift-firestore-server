@@ -20,7 +20,7 @@
 /// let schema = AppSchema(client: firestoreClient)
 /// let user = try await schema.users("userId").get(as: User.self, authorization: token)
 /// ```
-@attached(member, names: named(database), named(client), named(init))
+@attached(member, names: named(database), named(client), named(init), arbitrary)
 @attached(memberAttribute)
 @attached(extension, conformances: FirestoreSchemaProtocol, Sendable)
 public macro FirestoreSchema() = #externalMacro(module: "FirestoreMacros", type: "FirestoreSchemaMacro")
@@ -35,7 +35,7 @@ public macro FirestoreSchema() = #externalMacro(module: "FirestoreMacros", type:
 ///     struct User: Codable { ... }
 /// }
 /// ```
-@attached(member, names: named(database), named(client), named(parentPath), named(init), named(callAsFunction))
+@attached(member, names: named(database), named(client), named(parentPath), named(init), named(callAsFunction), named(collectionId), arbitrary)
 @attached(extension, conformances: FirestoreCollectionProtocol, Sendable)
 public macro Collection(_ collectionId: String) = #externalMacro(module: "FirestoreMacros", type: "CollectionMacro")
 
@@ -53,6 +53,6 @@ public macro Collection(_ collectionId: String) = #externalMacro(module: "Firest
 ///     }
 /// }
 /// ```
-@attached(member, names: named(database), named(client), named(parentPath), named(init), named(callAsFunction))
+@attached(member, names: named(database), named(client), named(parentPath), named(init), named(callAsFunction), named(collectionId), arbitrary)
 @attached(extension, conformances: FirestoreCollectionProtocol, Sendable)
 public macro SubCollection(_ collectionId: String) = #externalMacro(module: "FirestoreMacros", type: "SubCollectionMacro")
