@@ -95,9 +95,9 @@
 - リリースプロセスガイド
 - GitHub Actions による DocC 自動デプロイ
 
-[1.0.2]: https://github.com/no-problem-dev/swift-firestore-server/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/no-problem-dev/swift-firestore-server/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/no-problem-dev/swift-firestore-server/releases/tag/v1.0.0
+[1.0.2]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/no-problem-dev/swift-firebase-server/releases/tag/v1.0.0
 
 <!-- Auto-generated on 2025-12-09T11:13:37Z by release workflow -->
 
