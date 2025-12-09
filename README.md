@@ -177,6 +177,76 @@ let (users, nextCursor) = try await schema.users
     .getWithCursor()
 ```
 
+### 6. FilterBuilder DSL
+
+ResultBuilderベースの宣言的なフィルター構文：
+
+```swift
+// 単一条件
+let activeUsers = try await schema.users
+    .query(as: User.self)
+    .filter {
+        Field("status") == "active"
+    }
+    .get()
+
+// 複数条件（明示的なAnd）
+let verifiedAdults = try await schema.users
+    .query(as: User.self)
+    .filter {
+        And {
+            Field("status") == "active"
+            Field("age") >= 18
+            Field("verified") == true
+        }
+    }
+    .get()
+
+// OR条件
+let admins = try await schema.users
+    .query(as: User.self)
+    .filter {
+        Or {
+            Field("role") == "admin"
+            Field("role") == "moderator"
+        }
+    }
+    .get()
+
+// ネストした条件
+let featuredProducts = try await schema.products
+    .query(as: Product.self)
+    .filter {
+        And {
+            Field("active") == true
+            Field("stock") > 0
+            Or {
+                Field("category") == "electronics"
+                Field("featured") == true
+            }
+        }
+    }
+    .get()
+
+// 条件分岐
+let users = try await schema.users
+    .query(as: User.self)
+    .filter {
+        And {
+            Field("status") == "active"
+            if onlyVerified {
+                Field("verified") == true
+            }
+        }
+    }
+    .get()
+```
+
+**利用可能な演算子:**
+- 比較: `==`, `!=`, `<`, `<=`, `>`, `>=`
+- 配列: `.contains()`, `.containsAny()`, `.in()`, `.notIn()`
+- NULL: `.isNull`, `.isNotNull`, `.isNaN`, `.isNotNaN`
+
 ## 低レベルAPI
 
 マクロを使わない場合、`CollectionReference`と`DocumentReference`を直接使用できます：

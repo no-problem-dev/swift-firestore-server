@@ -218,3 +218,89 @@ extension FirestoreValueError: CustomStringConvertible {
         }
     }
 }
+
+// MARK: - FirestoreValueConvertible
+
+/// SwiftネイティブタイプからFirestoreValueへの変換プロトコル
+///
+/// このプロトコルを使用することで、FilterBuilder DSLで
+/// Swift標準型を直接フィルター値として使用できます。
+///
+/// ```swift
+/// query.filter {
+///     Field("name") == "John"  // String → FirestoreValue.string
+///     Field("age") >= 18       // Int → FirestoreValue.integer
+/// }
+/// ```
+public protocol FirestoreValueConvertible: Sendable {
+    /// FirestoreValueに変換
+    func toFirestoreValue() -> FirestoreValue
+}
+
+// MARK: - Standard Type Conformances
+
+extension String: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .string(self)
+    }
+}
+
+extension Bool: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .boolean(self)
+    }
+}
+
+extension Int: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .integer(Int64(self))
+    }
+}
+
+extension Int64: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .integer(self)
+    }
+}
+
+extension Int32: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .integer(Int64(self))
+    }
+}
+
+extension Double: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .double(self)
+    }
+}
+
+extension Float: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .double(Double(self))
+    }
+}
+
+extension Date: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .timestamp(self)
+    }
+}
+
+extension Data: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .bytes(self)
+    }
+}
+
+extension FirestoreValue: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        self
+    }
+}
+
+extension Array: FirestoreValueConvertible where Element: FirestoreValueConvertible {
+    public func toFirestoreValue() -> FirestoreValue {
+        .array(self.map { $0.toFirestoreValue() })
+    }
+}

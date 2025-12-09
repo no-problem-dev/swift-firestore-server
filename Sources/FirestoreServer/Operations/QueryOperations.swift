@@ -89,16 +89,3 @@ extension FirestoreClient {
         return try await runQuery(query, authorization: authorization)
     }
 }
-
-// MARK: - Query Result
-
-/// クエリ結果を表す構造体（将来の拡張用）
-public struct QueryResult<T: Sendable>: Sendable {
-    /// 結果のドキュメント
-    public let documents: [T]
-
-    /// 空のクエリ結果
-    public static var empty: QueryResult<T> {
-        QueryResult(documents: [])
-    }
-}
