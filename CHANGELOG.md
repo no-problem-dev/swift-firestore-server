@@ -7,7 +7,19 @@
 
 ## [未リリース]
 
-なし
+## [1.0.1] - 2025-12-09
+
+### 追加
+- **FilterBuilder DSL** - ResultBuilderベースの宣言的フィルター構文
+  - `Field` - フィールド参照と演算子オーバーロード（`==`, `!=`, `<`, `<=`, `>`, `>=`）
+  - `And` / `Or` - 明示的な論理グループ化
+  - `.contains()`, `.containsAny()`, `.in()`, `.notIn()` - 配列操作
+  - `.isNull`, `.isNotNull`, `.isNaN`, `.isNotNaN` - NULL/NaN判定
+  - `Query.filter { }` - DSLを使用したフィルター追加
+- `FirestoreValueConvertible` - Swift標準型からFirestoreValueへの変換プロトコル
+
+### 削除
+- `QueryResult<T>` - 未使用の構造体を削除
 
 ## [1.0.0] - 2025-12-09
 
