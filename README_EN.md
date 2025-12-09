@@ -2,6 +2,8 @@
 
 Firestore REST API client for server-side Swift
 
+🌐 English | **[日本語](README.md)**
+
 ![Swift](https://img.shields.io/badge/Swift-6.2-orange.svg)
 ![Platforms](https://img.shields.io/badge/Platforms-macOS%2014+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
