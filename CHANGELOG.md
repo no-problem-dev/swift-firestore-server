@@ -51,3 +51,5 @@
 - GitHub Actions による DocC 自動デプロイ
 
 [1.0.0]: https://github.com/no-problem-dev/swift-firestore-server/releases/tag/v1.0.0
+
+<!-- Auto-generated on 2025-12-09T01:10:28Z by release workflow -->
