@@ -23,6 +23,11 @@ public final class FirestoreClient: Sendable {
     /// 設定
     public let configuration: FirestoreConfiguration
 
+    /// データベースパス（マクロ用のコンビニエンスプロパティ）
+    public var database: DatabasePath {
+        configuration.database
+    }
+
     /// HTTPクライアントプロバイダー
     private let httpClientProvider: HTTPClientProvider
 
