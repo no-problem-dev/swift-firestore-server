@@ -7,6 +7,29 @@
 
 ## [未リリース]
 
+## [1.0.2] - 2025-12-09
+
+### 追加
+- **AuthServer** - Firebase ID トークン検証クライアント
+  - `AuthClient` - IDトークン検証のメインエントリポイント
+  - `AuthConfiguration` - 本番環境/エミュレーター対応の設定
+  - `IDTokenVerifier` - JWT検証とRS256署名検証
+  - `PublicKeyCache` - Google公開鍵のキャッシュ（Cache-Control対応）
+  - `VerifiedToken` - 検証済みトークン情報（uid, email, signInProvider等）
+  - `JWTDecoder` - Base64URLデコードとJSONパース
+  - `AuthError` - Goバックエンド互換のエラーコード
+
+### 機能
+- Firebase公式ドキュメントに準拠したIDトークン検証
+  - JWT形式検証（alg: RS256）
+  - クレーム検証（exp, iat, aud, iss, sub, auth_time）
+  - RS256署名検証（SwiftCrypto使用）
+- `verifyAuthorizationHeader()` - Bearerトークン抽出と検証
+- エミュレーターモード - 開発時の署名検証スキップ
+
+### 依存関係
+- `swift-crypto` 3.0.0+ を追加（RS256署名検証用）
+
 ## [1.0.1] - 2025-12-09
 
 ### 追加
@@ -72,6 +95,7 @@
 - リリースプロセスガイド
 - GitHub Actions による DocC 自動デプロイ
 
+[1.0.2]: https://github.com/no-problem-dev/swift-firestore-server/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/no-problem-dev/swift-firestore-server/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/no-problem-dev/swift-firestore-server/releases/tag/v1.0.0
 
