@@ -5,6 +5,10 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [セマンティックバージョニング](https://semver.org/lang/ja/spec/v2.0.0.html) に準拠しています。
 
+## [未リリース]
+
+なし
+
 ## [1.0.0] - 2025-12-09
 
 ### 追加
@@ -35,3 +39,5 @@
 - GitHub Actions による DocC 自動デプロイ
 
 [1.0.0]: https://github.com/no-problem-dev/swift-firestore-server/releases/tag/v1.0.0
+
+<!-- Auto-generated on 2025-12-09T01:10:28Z by release workflow -->
