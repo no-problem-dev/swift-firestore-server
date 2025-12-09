@@ -74,3 +74,5 @@
 
 [1.0.1]: https://github.com/no-problem-dev/swift-firestore-server/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/no-problem-dev/swift-firestore-server/releases/tag/v1.0.0
+
+<!-- Auto-generated on 2025-12-09T11:13:37Z by release workflow -->
