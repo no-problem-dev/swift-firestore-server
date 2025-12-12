@@ -44,20 +44,31 @@ public final class FirestoreClient: Sendable {
     ///
     /// Cloud Run / ローカル gcloud 環境から projectId と token を自動取得する。
     ///
-    /// - Parameter config: `.auto` または `.autoWithDatabase(databaseId:)`
+    /// - Parameters:
+    ///   - config: `.auto` または `.autoWithDatabase(databaseId:)`
+    ///   - keyEncodingStrategy: キーのエンコーディング戦略
+    ///   - keyDecodingStrategy: キーのデコーディング戦略
     /// - Throws: `GCPAuthError` 取得に失敗した場合
-    public init(_ config: GCPConfiguration) async throws {
+    public init(
+        _ config: GCPConfiguration,
+        keyEncodingStrategy: KeyEncodingStrategy = .useDefaultKeys,
+        keyDecodingStrategy: KeyDecodingStrategy = .useDefaultKeys
+    ) async throws {
         let resolved = try await GCPEnvironment.shared.resolve(config)
 
         if resolved.isEmulator {
             self.configuration = FirestoreConfiguration.emulator(
                 projectId: resolved.projectId,
-                databaseId: resolved.databaseId
+                databaseId: resolved.databaseId,
+                keyEncodingStrategy: keyEncodingStrategy,
+                keyDecodingStrategy: keyDecodingStrategy
             )
         } else {
             self.configuration = FirestoreConfiguration(
                 projectId: resolved.projectId,
-                databaseId: resolved.databaseId
+                databaseId: resolved.databaseId,
+                keyEncodingStrategy: keyEncodingStrategy,
+                keyDecodingStrategy: keyDecodingStrategy
             )
         }
         self.token = resolved.token
@@ -76,6 +87,46 @@ public final class FirestoreClient: Sendable {
             self.token = "owner"
         case .explicit(let projectId, let token):
             self.configuration = FirestoreConfiguration(projectId: projectId)
+            self.token = token
+        }
+        self.httpClientProvider = HTTPClientProvider()
+    }
+
+    /// 同期初期化（詳細オプション付き）
+    ///
+    /// キーエンコーディング戦略やエミュレーター設定を細かく指定する場合に使用。
+    ///
+    /// - Parameters:
+    ///   - config: `.emulator(projectId:)` または `.explicit(projectId:token:)`
+    ///   - keyEncodingStrategy: キーのエンコーディング戦略
+    ///   - keyDecodingStrategy: キーのデコーディング戦略
+    ///   - emulatorHost: エミュレーターホスト（エミュレーターモード時のみ有効）
+    ///   - emulatorPort: エミュレーターポート（エミュレーターモード時のみ有効）
+    public init(
+        _ config: GCPConfiguration,
+        keyEncodingStrategy: KeyEncodingStrategy = .useDefaultKeys,
+        keyDecodingStrategy: KeyDecodingStrategy = .useDefaultKeys,
+        emulatorHost: String = "localhost",
+        emulatorPort: Int = 8080
+    ) {
+        switch config {
+        case .auto, .autoWithDatabase:
+            fatalError("Use async init for .auto: try await FirestoreClient(.auto)")
+        case .emulator(let projectId):
+            self.configuration = FirestoreConfiguration.emulator(
+                projectId: projectId,
+                host: emulatorHost,
+                port: emulatorPort,
+                keyEncodingStrategy: keyEncodingStrategy,
+                keyDecodingStrategy: keyDecodingStrategy
+            )
+            self.token = "owner"
+        case .explicit(let projectId, let token):
+            self.configuration = FirestoreConfiguration(
+                projectId: projectId,
+                keyEncodingStrategy: keyEncodingStrategy,
+                keyDecodingStrategy: keyDecodingStrategy
+            )
             self.token = token
         }
         self.httpClientProvider = HTTPClientProvider()
