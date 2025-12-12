@@ -7,23 +7,30 @@ import Internal
 /// サーバーサイドSwiftからFirestoreにアクセスするための軽量クライアント。
 /// Firebase SDKを使用せず、REST APIを直接呼び出す。
 ///
-/// 使用例:
+/// ## 初期化方法
+///
+/// ### 自動設定（Cloud Run / ローカル gcloud）
 /// ```swift
-/// let firestore = FirestoreClient(projectId: "my-project")
+/// let firestore = try await FirestoreClient(.auto)
+/// ```
 ///
-/// // コレクション・ドキュメント参照
-/// let usersRef = firestore.collection("users")
-/// let userRef = usersRef.document("abc123")
-/// let booksRef = userRef.collection("books")
+/// ### エミュレーター
+/// ```swift
+/// let firestore = FirestoreClient(.emulator(projectId: "demo-project"))
+/// ```
 ///
-/// // データ操作（ID Tokenを渡す）
-/// let user: User = try await firestore.getDocument(userRef, authorization: idToken)
+/// ### 明示指定（テストやカスタム認証フロー）
+/// ```swift
+/// let firestore = FirestoreClient(.explicit(projectId: "my-project", token: accessToken))
 /// ```
 public final class FirestoreClient: Sendable {
-    /// 設定
+    /// Firestore設定
     public let configuration: FirestoreConfiguration
 
-    /// データベースパス（マクロ用のコンビニエンスプロパティ）
+    /// 認証トークン
+    public let token: String
+
+    /// データベースパス
     public var database: DatabasePath {
         configuration.database
     }
@@ -31,45 +38,58 @@ public final class FirestoreClient: Sendable {
     /// HTTPクライアントプロバイダー
     private let httpClientProvider: HTTPClientProvider
 
-    /// 本番環境用の初期化
-    /// - Parameters:
-    ///   - projectId: Google CloudプロジェクトID
-    ///   - databaseId: データベースID（デフォルト: "(default)"）
-    public convenience init(projectId: String, databaseId: String = "(default)") {
-        let config = FirestoreConfiguration(projectId: projectId, databaseId: databaseId)
-        self.init(configuration: config)
-    }
+    // MARK: - Initialization
 
-    /// 設定を指定して初期化
-    /// - Parameter configuration: Firestore設定
-    public init(configuration: FirestoreConfiguration) {
-        self.configuration = configuration
+    /// 自動設定モードで初期化（async）
+    ///
+    /// Cloud Run / ローカル gcloud 環境から projectId と token を自動取得する。
+    ///
+    /// - Parameter config: `.auto` または `.autoWithDatabase(databaseId:)`
+    /// - Throws: `GCPAuthError` 取得に失敗した場合
+    public init(_ config: GCPConfiguration) async throws {
+        let resolved = try await GCPEnvironment.shared.resolve(config)
+
+        if resolved.isEmulator {
+            self.configuration = FirestoreConfiguration.emulator(
+                projectId: resolved.projectId,
+                databaseId: resolved.databaseId
+            )
+        } else {
+            self.configuration = FirestoreConfiguration(
+                projectId: resolved.projectId,
+                databaseId: resolved.databaseId
+            )
+        }
+        self.token = resolved.token
         self.httpClientProvider = HTTPClientProvider()
     }
 
-    /// 設定と既存のHTTPClientProviderを指定して初期化
-    /// - Parameters:
-    ///   - configuration: Firestore設定
-    ///   - httpClientProvider: 既存のHTTPClientProvider
-    public init(configuration: FirestoreConfiguration, httpClientProvider: HTTPClientProvider) {
-        self.configuration = configuration
-        self.httpClientProvider = httpClientProvider
+    /// 同期初期化（emulator / explicit のみ）
+    ///
+    /// - Parameter config: `.emulator(projectId:)` または `.explicit(projectId:token:)`
+    public init(_ config: GCPConfiguration) {
+        switch config {
+        case .auto, .autoWithDatabase:
+            fatalError("Use async init for .auto: try await FirestoreClient(.auto)")
+        case .emulator(let projectId):
+            self.configuration = FirestoreConfiguration.emulator(projectId: projectId)
+            self.token = "owner"
+        case .explicit(let projectId, let token):
+            self.configuration = FirestoreConfiguration(projectId: projectId)
+            self.token = token
+        }
+        self.httpClientProvider = HTTPClientProvider()
     }
 
     // MARK: - Reference生成
 
     /// ルートコレクションへの参照を取得
-    /// - Parameter collectionId: コレクションID
-    /// - Returns: コレクション参照
     public func collection(_ collectionId: String) -> CollectionReference {
         let path = try! CollectionPath(collectionId)
         return CollectionReference(database: configuration.database, path: path)
     }
 
     /// ドキュメントへの参照を取得（パス直接指定）
-    /// - Parameter path: ドキュメントパス（例: "users/abc123"）
-    /// - Returns: ドキュメント参照
-    /// - Throws: パスが無効な場合
     public func document(_ path: String) throws -> DocumentReference {
         let docPath = try DocumentPath(path)
         return DocumentReference(database: configuration.database, path: docPath)
@@ -77,7 +97,6 @@ public final class FirestoreClient: Sendable {
 
     // MARK: - Internal
 
-    /// HTTPクライアントへのアクセス（内部用）
     internal var client: HTTPClient {
         httpClientProvider.client
     }

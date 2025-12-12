@@ -45,7 +45,12 @@ enum Schema {
     }
 }
 
-let client = FirestoreClient(projectId: "my-project")
+// Cloud Run / ローカル gcloud 自動検出
+let client = try await FirestoreClient(.auto)
+
+// エミュレーター使用時
+// let client = FirestoreClient(.emulator(projectId: "demo-project"))
+
 let userRef = try client.document(Schema.Users.documentPath("user123"))
 let user: User = try await client.getDocument(userRef, as: User.self)
 ```

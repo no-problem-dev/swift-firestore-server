@@ -78,32 +78,23 @@ extension FirestoreDocumentProtocol {
 
 extension FirestoreDocumentProtocol {
     /// ドキュメントを取得
-    public func get<T: Decodable>(
-        as type: T.Type,
-        authorization: String
-    ) async throws -> T {
-        try await client.getDocument(reference, as: type, authorization: authorization)
+    public func get<T: Decodable>(as type: T.Type) async throws -> T {
+        try await client.getDocument(reference, as: type)
     }
 
     /// ドキュメントを作成
-    public func create<T: Encodable>(
-        data: T,
-        authorization: String
-    ) async throws {
-        try await client.createDocument(reference, data: data, authorization: authorization)
+    public func create<T: Encodable>(data: T) async throws {
+        try await client.createDocument(reference, data: data)
     }
 
     /// ドキュメントを更新
-    public func update<T: Encodable>(
-        data: T,
-        authorization: String
-    ) async throws {
-        try await client.updateDocument(reference, data: data, authorization: authorization)
+    public func update<T: Encodable>(data: T) async throws {
+        try await client.updateDocument(reference, data: data)
     }
 
     /// ドキュメントを削除
-    public func delete(authorization: String) async throws {
-        try await client.deleteDocument(reference, authorization: authorization)
+    public func delete() async throws {
+        try await client.deleteDocument(reference)
     }
 }
 
@@ -118,24 +109,19 @@ extension FirestoreCollectionProtocol {
     /// クエリを実行
     public func getAll<T: Decodable & Sendable>(
         as type: T.Type,
-        authorization: String,
         pageSize: Int = 100,
         pageToken: String? = nil
     ) async throws -> (documents: [T], nextPageToken: String?) {
         try await client.listDocuments(
             in: reference,
             as: type,
-            authorization: authorization,
             pageSize: pageSize,
             pageToken: pageToken
         )
     }
 
     /// クエリを実行して結果を取得
-    public func execute<T: Decodable & Sendable>(
-        _ query: Query<T>,
-        authorization: String
-    ) async throws -> [T] {
-        try await client.runQuery(query, authorization: authorization)
+    public func execute<T: Decodable & Sendable>(_ query: Query<T>) async throws -> [T] {
+        try await client.runQuery(query)
     }
 }

@@ -7,15 +7,17 @@ FirestoreClientを使用したCRUD操作です。
 ```swift
 import FirestoreServer
 
-// 本番環境
-let client = FirestoreClient(projectId: "your-project-id")
+// Cloud Run / ローカル gcloud（自動検出）
+let client = try await FirestoreClient(.auto)
 
 // カスタムデータベースID
-let client = FirestoreClient(projectId: "your-project-id", databaseId: "custom-db")
+let client = try await FirestoreClient(.autoWithDatabase(databaseId: "custom-db"))
 
 // エミュレーター
-let config = FirestoreConfiguration.emulator(projectId: "your-project-id")
-let client = FirestoreClient(configuration: config)
+let client = FirestoreClient(.emulator(projectId: "demo-project"))
+
+// 明示指定
+let client = FirestoreClient(.explicit(projectId: "my-project", token: accessToken))
 ```
 
 ## 参照の取得

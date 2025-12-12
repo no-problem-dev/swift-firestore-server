@@ -41,14 +41,27 @@ enum Schema {
 }
 
 // 3. クライアントを初期化
-let client = FirestoreClient(
-    projectId: "your-project-id",
-    accessToken: accessToken
-)
+let client = try await FirestoreClient(.auto)
 
 // 4. ドキュメントを操作
 let docRef = client.document(Schema.Users.documentPath("user123"))
 let user: User = try await client.getDocument(docRef, as: User.self)
+```
+
+## 環境別の初期化
+
+```swift
+// Cloud Run / ローカル gcloud（自動検出）
+let client = try await FirestoreClient(.auto)
+
+// カスタムデータベースID
+let client = try await FirestoreClient(.autoWithDatabase(databaseId: "custom-db"))
+
+// エミュレーター
+let client = FirestoreClient(.emulator(projectId: "demo-project"))
+
+// 明示指定（テスト等）
+let client = FirestoreClient(.explicit(projectId: "my-project", token: accessToken))
 ```
 
 ## 要件
