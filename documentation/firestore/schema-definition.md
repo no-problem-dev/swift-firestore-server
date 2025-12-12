@@ -100,7 +100,8 @@ enum Items {}
 ## パスの使用例
 
 ```swift
-let client = FirestoreClient(projectId: "my-project", accessToken: token)
+// Cloud Run / ローカル gcloud 自動検出
+let client = try await FirestoreClient(.auto)
 
 // ドキュメント参照を作成
 let userRef = client.document(Schema.Users.documentPath("user123"))

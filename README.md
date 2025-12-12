@@ -45,7 +45,12 @@ enum Schema {
     }
 }
 
-let client = FirestoreClient(projectId: "my-project")
+// Cloud Run / ローカル gcloud 自動検出
+let client = try await FirestoreClient(.auto)
+
+// エミュレーター使用時
+// let client = FirestoreClient(.emulator(projectId: "demo-project"))
+
 let userRef = try client.document(Schema.Users.documentPath("user123"))
 let user: User = try await client.getDocument(userRef, as: User.self)
 ```
@@ -78,8 +83,7 @@ dependencies: [
 |--------|------|
 | [はじめに](documentation/getting-started.md) | 環境構築とクイックスタート |
 | [Firestore ドキュメント操作](documentation/firestore/document-operations.md) | CRUD操作 |
-| [Firestore クエリ](documentation/firestore/queries.md) | 条件付き検索 |
-| [Firestore FilterBuilder DSL](documentation/firestore/filter-builder-dsl.md) | 宣言的フィルター構文 |
+| [Firestore クエリ](documentation/firestore/queries.md) | フィルター、ソート、ページネーション |
 | [Firestore スキーマ定義](documentation/firestore/schema-definition.md) | @FirestoreSchema マクロ |
 | [Firestore モデル定義](documentation/firestore/model-definition.md) | @FirestoreModel マクロ |
 | [Storage ファイル操作](documentation/storage/file-operations.md) | アップロード・ダウンロード |
