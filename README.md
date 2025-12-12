@@ -21,15 +21,13 @@
 import FirestoreServer
 import FirestoreSchema
 
-// モデル定義（CodingKeys自動生成）
 @FirestoreModel(keyStrategy: .snakeCase)
 struct User {
     let id: String
-    let displayName: String  // → display_name
+    let displayName: String
     let email: String
 }
 
-// スキーマ定義（enumで型安全なパス構築）
 @FirestoreSchema
 enum Schema {
     @Collection("users", model: User.self)
@@ -39,15 +37,9 @@ enum Schema {
     }
 }
 
-// パス生成
-Schema.Users.collectionPath                    // "users"
-Schema.Users.documentPath("user123")           // "users/user123"
-Schema.Users.Posts.collectionPath("user123")   // "users/user123/posts"
-
-// クライアント操作
 let client = FirestoreClient(projectId: "my-project")
 let userRef = try client.document(Schema.Users.documentPath("user123"))
-let user: User = try await client.getDocument(userRef, as: User.self, authorization: idToken)
+let user: User = try await client.getDocument(userRef, as: User.self)
 ```
 
 ## インストール
