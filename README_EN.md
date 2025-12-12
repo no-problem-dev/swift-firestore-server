@@ -8,6 +8,14 @@ Firebase REST API client for server-side Swift (Firestore & Cloud Storage & Auth
 ![Platforms](https://img.shields.io/badge/Platforms-macOS%2014+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## What You Can Do
+
+- Firestore document CRUD operations
+- Cloud Storage file upload & download
+- Firebase Auth ID token verification
+- Type-safe collection path generation
+- Declarative query building
+
 ## Features
 
 - **Swift Macro DSL** - Type-safe schema and model definitions with `@FirestoreSchema`, `@Collection`, `@FirestoreModel`
@@ -89,12 +97,6 @@ dependencies: [
 ### 🔧 Technical Reference
 
 - [Swift Macro Reference](docs/references/macros/README.md) - Comprehensive macro reference
-  - [Freestanding Macro](docs/references/macros/freestanding-macros.md) - Expression & Declaration macros
-  - [Attached Macro](docs/references/macros/attached-macros.md) - Member, Peer, Accessor macros
-  - [Package Structure](docs/references/macros/package-structure.md) - Package.swift, plugin registration
-  - [SwiftSyntax API](docs/references/macros/swiftsyntax-api.md) - Syntax tree manipulation
-  - [Diagnostics](docs/references/macros/diagnostics.md) - Error messages, Fix-Its
-  - [Testing](docs/references/macros/testing.md) - assertMacroExpansion
 
 ## Requirements
 

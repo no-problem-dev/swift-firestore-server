@@ -8,6 +8,14 @@
 ![Platforms](https://img.shields.io/badge/Platforms-macOS%2014+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT.svg)
 
+## できること
+
+- Firestore のドキュメント CRUD 操作
+- Cloud Storage のファイルアップロード・ダウンロード
+- Firebase Auth の ID トークン検証
+- 型安全なコレクションパス生成
+- 宣言的なクエリ構築
+
 ## 特徴
 
 - **Swift Macro DSL** - `@FirestoreSchema`、`@Collection`、`@FirestoreModel` で型安全なスキーマとモデルを定義
@@ -89,12 +97,6 @@ dependencies: [
 ### 🔧 技術リファレンス
 
 - [Swift Macro リファレンス](docs/references/macros/README.md) - マクロの包括的なリファレンス
-  - [Freestanding Macro](docs/references/macros/freestanding-macros.md) - 独立型マクロ（Expression, Declaration）
-  - [Attached Macro](docs/references/macros/attached-macros.md) - 付与型マクロ（Member, Peer, Accessor等）
-  - [パッケージ構成](docs/references/macros/package-structure.md) - Package.swift、プラグイン登録
-  - [SwiftSyntax API](docs/references/macros/swiftsyntax-api.md) - 構文木の操作
-  - [診断とエラー](docs/references/macros/diagnostics.md) - エラーメッセージ、Fix-It
-  - [テスト手法](docs/references/macros/testing.md) - assertMacroExpansion
 
 ## 要件
 
