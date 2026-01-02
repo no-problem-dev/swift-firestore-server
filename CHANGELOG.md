@@ -9,6 +9,22 @@
 
 なし
 
+## [1.0.10] - 2026-01-02
+
+### 変更
+
+- **Swift 6.2 対応**: Swift 6.2 安定版に対応
+  - `swift-tools-version`: 6.0 → 6.2
+  - `swift-syntax`: 600.0.0 → 602.0.0
+  - `swift-crypto`: 3.0.0 → 4.0.0
+  - 依存関係指定を `.upToNextMajor` に統一
+
+### 追加
+
+- **CI テストワークフロー**: macOS および Linux x86_64 でのテストを追加
+  - macOS 15 (Swift 6.2)
+  - Linux x86_64 (swift:6.2-bookworm)
+
 ## [1.0.9] - 2026-01-02
 
 ### 変更
@@ -262,7 +278,8 @@ import FirebaseAuthServer
 - リリースプロセスガイド
 - GitHub Actions による DocC 自動デプロイ
 
-[未リリース]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.9...HEAD
+[未リリース]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.10...HEAD
+[1.0.10]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.9...v1.0.10
 [1.0.9]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/no-problem-dev/swift-firebase-server/compare/v1.0.6...v1.0.7
